@@ -5,14 +5,12 @@
         "lock_until": 0,
         "blocked": false
     },
-    
     "user02": {
         "password": "Test@456",
         "failed_attempts": 0,
         "lock_until": 0,
         "blocked": false
     },
-
     "user03": {
         "password": "Test@789",
         "failed_attempts": 0,
