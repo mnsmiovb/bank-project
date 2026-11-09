@@ -26,6 +26,10 @@ def create_default_data():
             "history": [],}
            
     return {"atm_cash":initial_atm_cash, "users": users}
+def save_data(data):
+    with open(data_file, "w") as file:
+        json.dump(data, file)
+    return True    
 if __name__=="__main__":
-    print (create_default_data())
-
+    data = create_default_data()
+    print (save_data(data))
