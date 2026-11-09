@@ -29,7 +29,15 @@ def create_default_data():
 def save_data(data):
     with open(data_file, "w") as file:
         json.dump(data, file)
-    return True    
+    return True  
+def load_data():
+    if not os.path.exists(data_file): 
+        data = create_default_data()
+        save_data(data)
+        return data
+    with open(data_file, "r") as file:
+        data = json.load(file)
+    return data
 if __name__=="__main__":
-    data = create_default_data()
-    print (save_data(data))
+    data = load_data()
+    print (data ["atm_cash"],list(data["users"].keys()))
