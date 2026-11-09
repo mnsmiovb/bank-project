@@ -27,16 +27,22 @@ def create_default_data():
            
     return {"atm_cash":initial_atm_cash, "users": users}
 def save_data(data):
-    with open(data_file, "w") as file:
+    with open("accounts.tmp", "w") as file:
         json.dump(data, file)
+    os.replace("accounts.tmp", data_file)   
     return True  
 def load_data():
     if not os.path.exists(data_file): 
         data = create_default_data()
         save_data(data)
         return data
-    with open(data_file, "r") as file:
-        data = json.load(file)
+    try:
+        with open(data_file, "r") as file:
+            data = json.load(file)
+    except :
+        print("Fayl pozulub yeni data yaradilir.")
+        data = create_default_data()
+        save_data(data)
     return data
 if __name__=="__main__":
     data = load_data()
