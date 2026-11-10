@@ -32,4 +32,4 @@ def withdrawal(accounts, username):
 
             print("Withdrawal successful!")
             print("Commission:", commission, "AZN")
-            print("New balance:", user["balance"]) git branch -D feature/withdrawals-and-atm
+            print("New balance:", user["balance"])
