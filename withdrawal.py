@@ -1,3 +1,7 @@
+from authentication import save_data
+
+from datetime import date
+
 def withdrawal(accounts, username):
     reset_daily_limits(accounts, username)
     user = accounts[username]
