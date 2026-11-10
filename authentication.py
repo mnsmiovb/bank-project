@@ -1,19 +1,23 @@
-import os
+# import os
 import time
 import json
+import hashlib
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ACCOUNTS_FILE = os.path.join(BASE_DIR, "accounts.json")
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
 
 def load_accounts():
-    with open(ACCOUNTS_FILE, "r") as file:
+    with open("accounts.json", "r") as file:
         return json.load(file)
 
-def save_data(accounts):
-    with open(ACCOUNTS_FILE, "w") as file:
-        json.dump(accounts, file, indent=4)
 
+def save_data(accounts):
+    with open("accounts.json", "w") as file:
+        json.dump(accounts, file, indent=4)
+        
+        
 def login(accounts):
 
     for attempt in range(3):
@@ -31,14 +35,14 @@ def login(accounts):
     account = accounts[username]
 
     if account["blocked"]:
-        print("Your account is permanently blocked")
+        print("Maximum login attempts exceeded.\nYour card has been blocked.\nPlease contact the bank administrator.")
         return None
         
 
     while True:
         userpassword = input("Password: ")
 
-        if userpassword == account["password"]:
+        if hash_password(userpassword) == account["password"]:
             account["failed_attempts"] = 0
             account["lock_until"] = 0
             save_data(accounts)
