@@ -1,33 +1,42 @@
+import datetime
+from feature.file_storage import save_data
 
-import json
 
-file = open("data.json", "r")
-data = json.load(file)
-file.close()
+def deposit(accounts, username):
+    user = accounts["users"][username]
 
-username = input("Enter username: ")
-user = data["users"][username]
+    # Reset daily limits if it is a new day
+    today = str(datetime.date.today())
+    if user["daily"]["date"] != today:
+        user["daily"]["date"] = today
+        user["daily"]["deposited"] = 0
+        user["daily"]["withdrawn"] = 0
 
-def deposit(amountdep):
-    amountdep = int(input("Enter deposit amount: "))
+    try:
+        amount = int(input("Enter deposit amount (AZN): "))
+    except ValueError:
+        print("Invalid amount! Please enter a valid number.")
+        return
 
-    if amountdep <= 0:
+    if amount <= 0:
         print("Invalid amount!")
 
-    elif user["daily_deposit"] + amountdep <= 2000:
-        user["balance"] += amountdep
-        user["daily_deposit"] += amountdep
-        data["atm"]["cash"] += amountdep
+    elif user["daily"]["deposited"] + amount * 100 <= 200000:
+        user["balance"] += amount * 100
+        user["daily"]["deposited"] += amount * 100
+        accounts["atm_cash"] += amount * 100
 
-        file = open("data.json", "w")
-        json.dump(data, file, indent=4)
-        file.close()
+        user["history"].append({
+            "type": "deposit",
+            "amount": amount * 100,
+            "date": today
+        })
+
+        save_data(accounts)
 
         print("Deposit successful!")
-        print("New balance:", user["balance"])
+        print("New balance:", user["balance"] / 100, "AZN")
 
     else:
-        print("You can deposit", 2000 - user["daily_deposit"], "AZN")
-
-
-
+        remaining = 200000 - user["daily"]["deposited"]
+        print("You can deposit", remaining / 100, "AZN today.")
