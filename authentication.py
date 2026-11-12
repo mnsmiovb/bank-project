@@ -35,43 +35,56 @@ def login(data):
     # Username yoxlanilmasi
     
     for attempt in range(3):
-        username=input("Username: ")
+        username = input("Username: ").strip()
+        userpassword = input("Password: ")
+        account = data["users"].get(username)
+        
+        if account is None:
+            print("Unsuccessful login")
+            continue
+        
+        # Accountun veziyyeti ucun
+        if account["blocked"]:
+            print("Maximum login attempts exceeded.\nYour card has been blocked.\nPlease contact the bank administrator.")
+            return None
+    
+        # Vaxtin giris cixis etdikden sonra silinmemesi ucun
+        if account["lock_until"]>time.time():
+          print("Your account is temporarily locked")
+          countdown(account)
+        
 
-        if username in data["users"]:
-            break
+        
+        
+        if check_password(data, username, userpassword):
+            print("Login successful!")
+            return username
 
         print("Unsuccessful login")
-
+            
     else:
         print("Too many attempts")
         return None
         
-    account=data["users"][username]
-    # Accountun veziyyeti ucun
-    if account["blocked"]:
-        print("Maximum login attempts exceeded.\nYour card has been blocked.\nPlease contact the bank administrator.")
-        return None
-    
-    # Vaxtin giris cixis etdikden sonra silinmemesi ucun
-    if account["lock_until"]>time.time():
-        print("Your account is temporarily locked")
-        countdown(account)
 
-    while True:
+
+
+def check_password(data,username,userpassword):
         # Password yoxlanilmasi
-        userpassword=input("Password: ")
-        
+        account = data["users"].get(username)
+       
         if hash_password(userpassword)==account["password"]:
             account["failed_attempts"]=0
             account["lock_until"]=0
             save_data(data)
 
             print("Login successful!")
-            return username
-
+            return True
+    
         account["failed_attempts"]+=1
-        print("Unsuccessful login")
-
+ 
+       
+        
         if account["failed_attempts"]>=6:
             account["blocked"]=True
             save_data(data)
@@ -85,6 +98,9 @@ def login(data):
             save_data(data)
             
             countdown(account)
-           
+        
+            
+          
         save_data(data)
-
+        return False
+ 
