@@ -1,20 +1,45 @@
 {
+    "atm_cash": 1000000,
     "user01": {
         "password": "8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e",
         "failed_attempts": 0,
         "lock_until": 0,
-        "blocked": false
+        "blocked": false,
+        "account_number": "10010001",
+        "balance": 250000,
+        "daily": {
+            "date": "",
+            "deposited": 0,
+            "withdrawn": 0
+        },
+        "history": []
     },
     "user02": {
         "password": "d55f4c24a17c7614cfc1d8c20d972d91a465b07057f019927031ae28fc3d8654",
         "failed_attempts": 0,
         "lock_until": 0,
-        "blocked": false
+        "blocked": false,
+        "account_number": "10010002",
+        "balance": 150000,
+        "daily": {
+            "date": "",
+            "deposited": 0,
+            "withdrawn": 0
+        },
+        "history": []
     },
     "user03": {
         "password": "8a8fd9f66ff76402e43153f378c7eb88630434e3a0bc174e1dfde05c28a0439c",
         "failed_attempts": 0,
         "lock_until": 0,
-        "blocked": false
+        "blocked": false,
+        "account_number": "10010003",
+        "balance": 300000,
+        "daily": {
+            "date": "",
+            "deposited": 0,
+            "withdrawn": 0
+        },
+        "history": []
     }
 }

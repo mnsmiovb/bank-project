@@ -1,12 +1,10 @@
+
 from authentication import login, load_accounts
 from passwordchange import change_password
-# from accounts import view_account_info, check_balance, daily_limits
-# from deposit import deposit
-# from withdraw import withdraw
-
-# from transfer import transfer
-# from history import transaction_history
-# from storage import save_accounts
+from account_information import account_information,check_balance
+from deposit import deposit
+from withdrawal import withdrawal
+# from daily_limits import daily_limits
  
 def show_menu(username):
     line = "=" * 36
@@ -32,17 +30,17 @@ def choose_menu(accounts, username):
         choice = input("Select an option: ").strip()
  
         if choice == "1":
-                # view_account_info(accounts, username)
-                pass
+                account_information(accounts, username)
+                
         elif choice == "2":
-                # check_balance(accounts, username)
-                pass
+                check_balance(accounts, username)
+                 
         elif choice == "3":
-                # deposit(accounts, username)
-                pass
+                deposit(accounts, username)
+        
         elif choice == "4":
-                # withdraw(accounts, username)\
-                pass
+                withdrawal(accounts, username)
+                
         elif choice == "5":
                 # transfer(accounts, username)
                 pass
