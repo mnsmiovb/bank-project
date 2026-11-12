@@ -1,5 +1,5 @@
 {
-    "atm_cash": 1000000,
+    "atm_cash": 500000,
     "user01": {
         "password": "8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e",
         "failed_attempts": 0,
@@ -8,9 +8,10 @@
         "account_number": "10010001",
         "balance": 250000,
         "daily": {
-            "date": "",
+            "date": "2026-11-12",
             "deposited": 0,
-            "withdrawn": 0
+            "withdrawn": 0,
+            "limit":0
         },
         "history": []
     },
@@ -24,7 +25,8 @@
         "daily": {
             "date": "",
             "deposited": 0,
-            "withdrawn": 0
+            "withdrawn": 0,
+            "limit":0
         },
         "history": []
     },
@@ -38,7 +40,8 @@
         "daily": {
             "date": "",
             "deposited": 0,
-            "withdrawn": 0
+            "withdrawn": 0,
+            "limit":0
         },
         "history": []
     }

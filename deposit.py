@@ -1,9 +1,10 @@
 import datetime
-from feature.file_storage import save_data
+#from feature.file_storage import save_data
+from authentication import save_data
 
 
 def deposit(accounts, username):
-    user = accounts["users"][username]
+    user = accounts[username]
 
     # Reset daily limits if it is a new day
     today = str(datetime.date.today())
@@ -11,6 +12,7 @@ def deposit(accounts, username):
         user["daily"]["date"] = today
         user["daily"]["deposited"] = 0
         user["daily"]["withdrawn"] = 0
+        
 
     try:
         amount = int(input("Enter deposit amount (AZN): "))
@@ -21,10 +23,11 @@ def deposit(accounts, username):
     if amount <= 0:
         print("Invalid amount!")
 
-    elif user["daily"]["deposited"] + amount * 100 <= 200000:
+    elif user["daily"]["deposited"] + amount * 100 <= 200000 and user["daily"]["limit"]<5:
         user["balance"] += amount * 100
         user["daily"]["deposited"] += amount * 100
-        accounts["atm_cash"] += amount * 100
+        accounts["atm_cash"] += int(amount * 100)
+        
 
         user["history"].append({
             "type": "deposit",
