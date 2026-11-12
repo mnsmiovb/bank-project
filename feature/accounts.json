@@ -1,0 +1,57 @@
+{
+    "atm_cash": 500000,
+    "last_txn_number": 0,
+    "users": {
+        "user01": {
+            "password": "Test@123",
+            "failed_attempts": 0,
+            "lock_until": 0,
+            "blocked": false,
+            "account_number": "10010001",
+            "balance": 250000,
+            "daily": {
+                "date": "2026-11-12",
+                "deposited": 0,
+                "withdrawn": 0,
+                "transfer_count": 0
+            },
+            "history": [],
+            "last_login": null,
+            "last_transaction": null
+        },
+        "user02": {
+            "password": "Test@456",
+            "failed_attempts": 0,
+            "lock_until": 0,
+            "blocked": false,
+            "account_number": "10010002",
+            "balance": 150000,
+            "daily": {
+                "date": "2026-11-12",
+                "deposited": 0,
+                "withdrawn": 0,
+                "transfer_count": 0
+            },
+            "history": [],
+            "last_login": null,
+            "last_transaction": null
+        },
+        "user03": {
+            "password": "Test@789",
+            "failed_attempts": 0,
+            "lock_until": 0,
+            "blocked": false,
+            "account_number": "10010003",
+            "balance": 300000,
+            "daily": {
+                "date": "2026-11-12",
+                "deposited": 0,
+                "withdrawn": 0,
+                "transfer_count": 0
+            },
+            "history": [],
+            "last_login": null,
+            "last_transaction": null
+        }
+    }
+}
