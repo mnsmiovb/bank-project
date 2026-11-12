@@ -16,8 +16,7 @@ def transfer_money(data, username):
     if username not in data["users"]:
         print("User not found.")
         return False
-
-    sender = data["users"][username]
+    sender=data["users"][username]
     if sender.get("blocked", False):
         print("Your account is blocked.")
         return False
@@ -29,28 +28,28 @@ def transfer_money(data, username):
     if recipient_username is None:
         print("Recipient account not found.")
         return False
-    if recipient_username == username:
+    if recipient_username==username:
         print("You cannot transfer money to your own account.")
         return False
     recipient = data["users"][recipient_username]
     if recipient.get("blocked", False):
         print("Recipient account is blocked.")
         return False
-    amount_text = input("Enter transfer amount: ")
-    amount = to_cents(amount_text)
+    amount_text=input("Enter transfer amount: ")
+    amount=to_cents(amount_text)
     if amount is None:
         print("Invalid amount.")
         return False
-    sender_balance = sender["balance"]
-    recipient_balance = recipient["balance"]
+    sender_balance=sender["balance"]
+    recipient_balance=recipient["balance"]
     if sender_balance < amount:
         print("Insufficient balance.")
         return False
-    snapshot = take_snapshot(data)
+    snapshot=take_snapshot(data)
     try:
-        sender["balance"] -= amount
-        recipient["balance"] += amount
-        sender["daily"]["transfer_count"] = (
+        sender["balance"]-=amount
+        recipient["balance"]+=amount
+        sender["daily"]["transfer_count"]=(
             sender["daily"].get("transfer_count", 0) + 1
         )
         add_transaction(
@@ -84,4 +83,4 @@ def transfer_money(data, username):
     except Exception as error:
         restore(data, snapshot)
         print(f"Transfer failed: {error}")
-        return False
+        return False 
