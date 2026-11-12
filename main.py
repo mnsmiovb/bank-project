@@ -1,10 +1,11 @@
-
-from authentication import login, load_accounts
+from feature.file_storage import load_data
+from authentication import login
 from passwordchange import change_password
-from account_information import account_information,check_balance
+from account_information import account_information, check_balance
 from deposit import deposit
-from withdrawal import withdrawal
-# from daily_limits import daily_limits
+from withdrawal import withdrawal, daily_limits
+from feature.transfers import transfer_money
+from feature.transaction_history import show_history
  
 def show_menu(username):
     line = "=" * 36
@@ -25,33 +26,33 @@ def show_menu(username):
     print("0. Exit")
     print(line)
     
-def choose_menu(accounts, username):
+def choose_menu(data, username):
         show_menu(username)
         choice = input("Select an option: ").strip()
  
         if choice == "1":
-                account_information(accounts, username)
+                account_information(data, username)
                 
         elif choice == "2":
-                check_balance(accounts, username)
+                check_balance(data, username)
                  
         elif choice == "3":
-                deposit(accounts, username)
+                deposit(data, username)
         
         elif choice == "4":
-                withdrawal(accounts, username)
+                withdrawal(data, username)
                 
         elif choice == "5":
-                # transfer(accounts, username)
-                pass
+                transfer_money(data, username)
+                
         elif choice == "6":
-                # transaction_history(accounts, username)
-                pass
+                show_history(data, username)
+                
         elif choice == "7":
-                # daily_limits(accounts, username)
-                pass
+                daily_limits(data, username)
+                
         elif choice == "8":
-                change_password(accounts, username)
+                change_password(data, username)
         elif choice == "9":       # login ekranına qayıdır
                 print("Logged out\n")
                 return "logout"
@@ -65,17 +66,17 @@ def choose_menu(accounts, username):
          
  
 def main():
-    accounts = load_accounts()
+    data = load_data()
 
     while True:
-        username=login(accounts)
+        username = login(data)
 
         if username is None:
             print("Login canceled")
             break
 
         while True: 
-            result=choose_menu(accounts, username)
+            result=choose_menu(data, username)
             if result in ("logout", "exit"):
                 break
 
