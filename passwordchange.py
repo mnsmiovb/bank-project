@@ -1,5 +1,6 @@
 from authentication import hash_password
 from feature.file_storage import save_data
+import time
 
 # Kohne passwordun yoxlanilmasi ucun verilen cehd sayi
 passwordattempts=3
@@ -19,6 +20,12 @@ def check_new_password(old_password, new_password):
     if new_password.isdigit():
                 return 'Weak password: password should not contain only digits'
             
+    if not any(digit.isdigit() for digit in new_password):
+            return 'Weak password: at least 1 digit should be used'    
+        # any zamani en azi 1 sert odenilirse true olur
+        # digit.isdigit() passwordda reqem olub olmadiqin yoxlayir
+        # eger reqem varsa anyden true cixir not onu false edir , yoxdursa returna dusur
+        
     if new_password == new_password.upper():
             return 'Weak password: at least 1 lowercase letter should also be used'
             
@@ -49,21 +56,26 @@ def change_password(data, username):
         return
     # Yeni parolun tesdiqlenmesi
     while True:  
-        new_password=input('Enter new password: ')
+        for attempt in range(passwordattempts):
+              new_password=input('Enter new password: ')
+
         
-        error=check_new_password(old_password,new_password)
-        if error:
-            print(error)
-            continue
+              error=check_new_password(old_password,new_password)
+              if error:
+                 print(error)
+                 continue
     
     
-        new_password_again=input('Enter new password again to confirm: ')
-        if new_password!=new_password_again:
-            print("Passwords do not match.Please try again")
-            continue
+              new_password_again=input('Enter new password again to confirm: ')
+              if new_password!=new_password_again:
+                print("Passwords do not match.Please try again")
+                continue
         
-        break
-    # Haslanma ve yadda saxlanmasi
-    account['password'] = hash_password(new_password)
-    save_data(data)
-    print('Password changed successfully')
+              break
+        else:
+            print("Too many wrong attempts. Returning to menu")
+            return
+# Haslanma ve yadda saxlanmasi
+        account['password'] = hash_password(new_password)
+        save_data(data)
+        print('Password changed successfully')

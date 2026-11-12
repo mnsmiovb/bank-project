@@ -1,5 +1,5 @@
 from datetime import datetime
-from file_storage import fmt
+from feature.file_storage import fmt
 
 deposit = "Deposit"
 withdrawal = "Withdrawal"
@@ -19,7 +19,7 @@ def add_transaction(data, username, tx_type, amount, before, after,
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     user = data["users"][username]
     record = {
-        "id": f"TXN{data['last_txn_number']:04d}",
+        "id": f"TXN{int(data['last_txn_number']):04d}",
         "time": now,
         "type": tx_type,
         "amount": amount,

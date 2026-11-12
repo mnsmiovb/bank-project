@@ -1,5 +1,5 @@
 from datetime import datetime
-from file_storage import(
+from feature.file_storage import(
     to_cents,
     fmt,
     find_username_by_account,
@@ -8,7 +8,7 @@ from file_storage import(
     restore,
     commit
 )
-from transaction_history import(
+from feature.transaction_history import(
     add_transaction,
     transfer_sent,
     transfer_received

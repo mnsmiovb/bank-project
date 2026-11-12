@@ -31,7 +31,7 @@ def choose_menu(data, username):
         choice = input("Select an option: ").strip()
  
         if choice == "1":
-                account_information(data, username)
+                account_information(data,username)
                 
         elif choice == "2":
                 check_balance(data, username)
@@ -66,9 +66,12 @@ def choose_menu(data, username):
          
  
 def main():
+        # Datani yukleyir
     data = load_data()
 
+
     while True:
+        #     Username'i goturur
         username = login(data)
 
         if username is None:

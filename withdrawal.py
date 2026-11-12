@@ -46,7 +46,7 @@ def withdrawal(data, username):
             user["daily"]["withdrawn"] += amount_qepik
             data["atm_cash"] -= amount_qepik
 
-            data["transactions"].append({
+            user["history"].append({
                 "id": str(uuid.uuid4()),
                 "username": username,
                 "type": "deposit",

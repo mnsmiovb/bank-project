@@ -60,7 +60,7 @@ def login(data):
     while True:
         # Password yoxlanilmasi
         userpassword=input("Password: ")
-
+        
         if hash_password(userpassword)==account["password"]:
             account["failed_attempts"]=0
             account["lock_until"]=0

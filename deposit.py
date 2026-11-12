@@ -24,14 +24,14 @@ def deposit(data, username):
     if amount <= 0:
         print("Invalid amount!")
 
-    elif user["daily"]["deposited"] + amount * 100 <= 200000 and user["daily"]["limit"]<5:
+    elif user["daily"]["deposited"] + amount * 100 <= 200000:
         user["balance"] += amount * 100
         user["daily"]["deposited"] += amount * 100
         data["atm_cash"] += int(amount * 100)
         
 
                 
-        data["transactions"].append({
+        user["history"].append({
                 "id": str(uuid.uuid4()),
                 "username": username,
                 "type": "deposit",
@@ -45,4 +45,7 @@ def deposit(data, username):
 
     else:
         remaining = 200000 - user["daily"]["deposited"]
-        print("You can deposit", remaining / 100, "AZN today.")
+        if remaining==0:
+            print("You have reached the deposit limit")
+        else:
+            print("You can deposit", remaining / 100, "AZN today.")

@@ -1,6 +1,6 @@
 
-def account_information(accounts, username):
-    user = accounts[username]
+def account_information(data, username):
+    user = data['users'][username]
 
     account_number = user["account_number"]
 
@@ -19,8 +19,8 @@ def account_information(accounts, username):
     print("Account Status:", status)
     print("=========================================")
     
-def check_balance(accounts, username):
-    user = accounts[username]
+def check_balance(data, username):
+    user = data['users'][username]
  
     # Convert balance from qepik to AZN
     balance = user["balance"]
