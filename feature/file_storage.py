@@ -14,36 +14,36 @@ def to_cents(text):
         amount = Decimal(text.strip())
     except (InvalidOperation, AttributeError):
         return None
-    if not amount.is_finite() or amount <= 0:
+    if not amount.is_finite() or amount <=0:
         return None
     if amount != amount.quantize(Decimal("0.01")):
         return None
     return int(amount * 100)
 def fmt(cents):
-    sign = "-" if cents < 0 else ""
-    cents = abs(cents)
+    sign="-" if cents < 0 else ""
+    cents=abs(cents)
     return f"{sign}{cents // 100}.{cents % 100:02d}"
 def today_str():
     return str(date.today())
 def reset_daily_if_new_day(user):
     daily = user["daily"]
-    if daily["date"] != today_str():
-        daily["date"] = today_str()
-        daily["deposited"] = 0
-        daily["withdrawn"] = 0
-        daily["transfer_count"] = 0
+    if daily["date"]!=today_str():
+        daily["date"]=today_str()
+        daily["deposited"]=0
+        daily["withdrawn"]=0
+        daily["transfer_count"]=0
 def find_username_by_account(data, account_number):
     for username, user in data["users"].items():
         if user["account_number"] == account_number:
             return username
     return None
 def create_default_data():
-    demo_accounts = [("user01", "Test@123", "10010001", 250000),
+    demo_accounts=[("user01", "Test@123", "10010001", 250000),
                      ("user02", "Test@456", "10010002", 150000),
                      ("user03", "Test@789", "10010003", 300000)]
     users = {}
     for username, password, account_number, balance in demo_accounts:
-        users[username] = {
+        users[username]={
             "password": password,
             "failed_attempts": 0,
             "lock_until": 0,
@@ -66,8 +66,8 @@ def is_int(value):
 def is_valid_user(user):
     if not isinstance(user, dict):
         return False
-    daily = user.get("daily")
-    history = user.get("history")
+    daily=user.get("daily")
+    history=user.get("history")
     if not isinstance(daily, dict) or not isinstance(history, list):
         return False
     if not isinstance(user.get("password"), str):
@@ -76,12 +76,12 @@ def is_valid_user(user):
         return False
     if not isinstance(user.get("blocked"), bool):
         return False
-    numbers = [user.get("balance"), user.get("failed_attempts"),
+    numbers=[user.get("balance"), user.get("failed_attempts"),
                daily.get("deposited"), daily.get("withdrawn"),
                daily.get("transfer_count")]
     if not all(is_int(number) for number in numbers):
         return False
-    lock_until = user.get("lock_until")
+    lock_until=user.get("lock_until")
     if isinstance(lock_until, bool) or not isinstance(lock_until, (int, float)):
         return False
     if lock_until < 0:
@@ -96,14 +96,14 @@ def is_valid_data(data):
         return False
     if "last_txn_number" in data and not is_int(data["last_txn_number"]):
         return False
-    users = data.get("users")
+    users=data.get("users")
     if not isinstance(users, dict) or not users:
         return False
     if not all(is_valid_user(user) for user in users.values()):
         return False
-    accounts = {user["account_number"] for user in users.values()}
+    accounts={user["account_number"] for user in users.values()}
     return len(accounts) == len(users)
-def add_missing_fields(data):
+def add_missing_fields(data): 
     if "last_txn_number" not in data:
         data["last_txn_number"] = sum(
             len(user["history"]) for user in data["users"].values())
@@ -127,12 +127,12 @@ def save_data(data):
         return False
 def load_data():
     if not os.path.exists(data_file):
-        data = create_default_data()
+        data=create_default_data()
         save_data(data)
         return data
     try:
         with open(data_file, "r", encoding="utf-8") as file:
-            data = json.load(file)
+            data=json.load(file)
         if not is_valid_data(data):
             raise ValueError("Wrong structure")
     except (json.JSONDecodeError, ValueError, OSError):
@@ -141,7 +141,7 @@ def load_data():
             os.replace(data_file, corrupt_file)
         except OSError:
             pass
-        data = create_default_data()
+        data=create_default_data()
         save_data(data)
         return data
     add_missing_fields(data)
@@ -159,12 +159,12 @@ def restore(target, source):
             else:
                 target[key] = copy.deepcopy(value)
     else:
-        target[:] = copy.deepcopy(source)
+        target[:]=copy.deepcopy(source)
 def commit(data, snapshot):
     if save_data(data):
         return True
     restore(data, snapshot)
     return False
-if __name__ == "__main__":
-    data = load_data()
+if __name__=="__main__":
+    data=load_data()
     print(fmt(data["atm_cash"]), list(data["users"].keys()))
