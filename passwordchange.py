@@ -1,9 +1,11 @@
 from authentication import hash_password
 from feature.file_storage import save_data
-import time
-
+import os
 # Kohne passwordun yoxlanilmasi ucun verilen cehd sayi
 passwordattempts=3
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+data_file = os.path.join(base_dir, "accounts.json")
 
 # Yeni passwordun tehlukesizliyinin artirilmasi ucun qoyulan sertler
 def check_new_password(old_password, new_password):
@@ -14,8 +16,7 @@ def check_new_password(old_password, new_password):
     if len(new_password)<8:
             return 'Weak password: password should be minimum 8 characters '
              
-    # .isupper() ve islower() evezine bele yazdimki istifadeci parol olaraq sadece bosluq,!,@,# kimi 
-    # simvollar istifade etmesin
+
     
     if new_password.isdigit():
                 return 'Weak password: password should not contain only digits'
@@ -28,7 +29,8 @@ def check_new_password(old_password, new_password):
         
     if new_password == new_password.upper():
             return 'Weak password: at least 1 lowercase letter should also be used'
-            
+                # .isupper() ve islower() evezine bele yazdimki istifadeci parol olaraq sadece bosluq,!,@,# kimi 
+                # simvollar istifade etmesin
         
     if new_password == new_password.lower():
             return 'Weak password: at least 1 uppercase letter should also be used'
@@ -75,7 +77,8 @@ def change_password(data, username):
         else:
             print("Too many wrong attempts. Returning to menu")
             return
+        break
 # Haslanma ve yadda saxlanmasi
-        account['password'] = hash_password(new_password)
-        save_data(data)
-        print('Password changed successfully')
+    account['password'] = hash_password(new_password)
+    save_data(data)
+    print('Password changed successfully')
