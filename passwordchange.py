@@ -1,5 +1,5 @@
- 
-from authentication import hash_password, save_data
+from authentication import hash_password
+from feature.file_storage import save_data
 
 # Kohne passwordun yoxlanilmasi ucun verilen cehd sayi
 passwordattempts=3
@@ -15,6 +15,10 @@ def check_new_password(old_password, new_password):
              
     # .isupper() ve islower() evezine bele yazdimki istifadeci parol olaraq sadece bosluq,!,@,# kimi 
     # simvollar istifade etmesin
+    
+    if new_password.isdigit():
+                return 'Weak password: password should not contain only digits'
+            
     if new_password == new_password.upper():
             return 'Weak password: at least 1 lowercase letter should also be used'
             
@@ -23,14 +27,13 @@ def check_new_password(old_password, new_password):
             return 'Weak password: at least 1 uppercase letter should also be used'
             
         
-    if new_password.isdigit():
-            return 'Weak password: password should not contain only digits'
+    
             
     
 # Passwordun deyismesi 
-def change_password(accounts, username):
+def change_password(data, username):
     
-    account = accounts[username]
+    account = data["users"][username]
     
     
         
@@ -62,5 +65,5 @@ def change_password(accounts, username):
         break
     # Haslanma ve yadda saxlanmasi
     account['password'] = hash_password(new_password)
-    save_data(accounts)
+    save_data(data)
     print('Password changed successfully')
