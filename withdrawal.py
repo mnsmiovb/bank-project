@@ -3,8 +3,8 @@ import datetime
 from authentication import save_data
 
 
-def withdrawal(accounts, username):
-    user = accounts[username]
+def withdrawal(data, username):
+    user = data["users"][username]
 
     # Reset daily limits if it is a new day
     today = str(datetime.date.today())
@@ -28,7 +28,7 @@ def withdrawal(accounts, username):
     elif user["daily"]["withdrawn"] + amount_qepik > 100000:
         print("Daily withdrawal limit is 1000 AZN!")
 
-    elif amount_qepik > accounts["atm_cash"]:
+    elif amount_qepik > data["atm_cash"]:
         print("Not enough cash in ATM!")
 
     else:
@@ -43,16 +43,17 @@ def withdrawal(accounts, username):
         else:
             user["balance"] -= total_cost
             user["daily"]["withdrawn"] += amount_qepik
-            accounts["atm_cash"] -= amount_qepik
+            data["atm_cash"] -= amount_qepik
 
-            user["history"].append({
-                "type": "withdrawal",
-                "amount": amount_qepik,
-                "fee": commission,
+            data["transactions"].append({
+                "id": str(uuid.uuid4()),
+                "username": username,
+                "type": "deposit",
+                "amount": amount*100,
                 "date": today
             })
 
-            save_data(accounts)
+            save_data(data)
             print("Withdrawal successful!")
             print("New balance:", user["balance"] / 100, "AZN")
 

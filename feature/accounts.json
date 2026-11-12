@@ -1,7 +1,6 @@
 {
     "atm_cash": 500000,
     "last_txn_number": 0,
-    "users": {
         "user01": {
             "password": "Test@123",
             "failed_attempts": 0,
@@ -54,4 +53,3 @@
             "last_transaction": null
         }
     }
-}
