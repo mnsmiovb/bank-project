@@ -1,9 +1,10 @@
 import datetime
-from feature.file_storage import save_data
+#from feature.file_storage import save_data
+from authentication import save_data
 
 
 def withdrawal(accounts, username):
-    user = accounts["users"][username]
+    user = accounts[username]
 
     # Reset daily limits if it is a new day
     today = str(datetime.date.today())
