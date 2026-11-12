@@ -14,7 +14,7 @@ def withdrawal(accounts, username):
 
     # Безопасный ввод: если пользователь введет буквы, программа не упадет
     try:
-        amount = int(input("Enter withdrawal amount (AZN): "))
+        amount = float(input("Enter withdrawal amount (AZN): "))
     except ValueError:
         print("Invalid amount! Please enter a valid number.")
         return
@@ -54,3 +54,34 @@ def withdrawal(accounts, username):
             save_data(accounts)
             print("Withdrawal successful!")
             print("New balance:", user["balance"] / 100, "AZN")
+
+
+def daily_limits(accounts, username):
+    user = accounts["users"][username]
+
+    # Reset daily limits if it is a new day
+    today = str(datetime.date.today())
+
+    if user["daily"]["date"] != today:
+        user["daily"]["date"] = today
+        user["daily"]["deposited"] = 0
+        user["daily"]["withdrawn"] = 0
+
+    deposit_remaining = 200000 - user["daily"]["deposited"]
+    withdrawal_remaining = 100000 - user["daily"]["withdrawn"]
+    fee_free_remaining = max(0, 50000 - user["daily"]["withdrawn"])
+
+    print("\n===== DAILY LIMITS =====")
+
+    print("\nDaily deposit limit:")
+    print("Used:", user["daily"]["deposited"] / 100, "AZN")
+    print("Remaining:", deposit_remaining / 100, "AZN")
+
+    print("\nDaily withdrawal limit:")
+    print("Used:", user["daily"]["withdrawn"] / 100, "AZN")
+    print("Remaining:", withdrawal_remaining / 100, "AZN")
+
+    print("\nFee-free withdrawal:")
+    print("Remaining:", fee_free_remaining / 100, "AZN")
+
+
