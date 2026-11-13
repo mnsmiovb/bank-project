@@ -1,13 +1,13 @@
 from datetime import datetime
 from file_storage import fmt
 
-deposit = "Deposit"
-withdrawal = "Withdrawal"
-transfer_sent = "Transfer Sent"
-transfer_received = "Transfer Received"
-withdrawal_commission = "Withdrawal Commission"
+deposit="Deposit"
+withdrawal="Withdrawal"
+transfer_sent="Transfer Sent"
+transfer_received="Transfer Received"
+withdrawal_commission="Withdrawal Commission"
 
-other_account_labels = {
+other_account_labels={
     transfer_sent: "Recipient account",
     transfer_received: "Sender account",
 }
@@ -16,9 +16,9 @@ other_account_labels = {
 def add_transaction(data, username, tx_type, amount, before, after,
                     fee=0, other_account=None):
     data["last_txn_number"] = data.get("last_txn_number", 0) + 1
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    user = data["users"][username]
-    record = {
+    now=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    user=data["users"][username]
+    record={
         "id": f"TXN{data['last_txn_number']:04d}",
         "time": now,
         "type": tx_type,
@@ -29,19 +29,19 @@ def add_transaction(data, username, tx_type, amount, before, after,
         "other_account": other_account,
     }
     user["history"].append(record)
-    user["last_transaction"] = now
+    user["last_transaction"]=now
     return record
 
 
 def get_history(data, username, limit=10):
-    if limit <= 0:
+    if limit<=0:
         return []
-    history = data["users"][username]["history"]
+    history=data["users"][username]["history"]
     return list(reversed(history[-limit:]))
 
 
 def show_history(data, username, limit=10):
-    records = get_history(data, username, limit)
+    records=get_history(data, username, limit)
     if not records:
         print("No transactions found.")
         return
