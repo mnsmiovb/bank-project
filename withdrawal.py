@@ -14,38 +14,48 @@ def withdrawal(data, username):
         user["daily"]["deposited"] = 0
         user["daily"]["withdrawn"] = 0
 
-    # Безопасный ввод: если пользователь введет буквы, программа не упадет
+    # --- SAFE INPUT VALIDATION ---
     try:
         amount = float(input("Enter withdrawal amount (AZN): "))
     except ValueError:
         print("Invalid amount! Please enter a valid number.")
         return
 
+    # Convert entered amount to qepiks
     amount_qepik = amount * 100
 
+    # --- PRE-WITHDRAWAL VALIDATION CHECKS ---
     if amount <= 0:
         print("Invalid amount!")
 
+    # Check daily withdrawal limit (max 1000 AZN = 100,000 qepiks)
     elif user["daily"]["withdrawn"] + amount_qepik > 100000:
         print("Daily withdrawal limit is 1000 AZN!")
 
+    
+    # Check if ATM has enough cash reserve
     elif amount_qepik > data["atm_cash"]:
         print("Not enough cash in ATM!")
 
+    # --- COMMISSION CALCULATION ---
+    # First 500 AZN (50,000 qepiks) per day are fee-free
     else:
         free_amount = max(0, 50000 - user["daily"]["withdrawn"])
         taxable_amount = max(0, amount_qepik - free_amount)
-        commission = round(taxable_amount * 0.02)
-        total_cost = amount_qepik + commission
+        commission = round(taxable_amount * 0.02) # 2% fee on the excess portion
+        total_cost = amount_qepik + commission  # Total deduction (amount + fee)
 
+        # Check if user has enough balance including commission
         if total_cost > user["balance"]:
             print("Not enough balance!")
 
         else:
+            # --- UPDATE BALANCES AND ATM CASH ---
             user["balance"] -= total_cost
             user["daily"]["withdrawn"] += amount_qepik
-            data["atm_cash"] -= amount_qepik
+            data["atm_cash"] -= amount_qepik  # Decrease ATM cash only by requested cash amount (excluding fee)
 
+            # --- RECORD TRANSACTION HISTORY ---
             user["history"].append({
                 "id": str(uuid.uuid4()),
                 "username": username,
@@ -62,7 +72,8 @@ def withdrawal(data, username):
 def daily_limits(accounts, username):
     user = accounts["users"][username]
 
-    # Reset daily limits if it is a new day
+
+    # Check date change to keep limit statistics accurate
     today = str(datetime.date.today())
 
     if user["daily"]["date"] != today:
@@ -70,10 +81,12 @@ def daily_limits(accounts, username):
         user["daily"]["deposited"] = 0
         user["daily"]["withdrawn"] = 0
 
+    # Calculate remaining limits
     deposit_remaining = 200000 - user["daily"]["deposited"]
     withdrawal_remaining = 100000 - user["daily"]["withdrawn"]
     fee_free_remaining = max(0, 50000 - user["daily"]["withdrawn"])
 
+    # Display limit details to the user (divided by 100 to show in AZN)
     print("\n===== DAILY LIMITS =====")
 
     print("\nDaily deposit limit:")
