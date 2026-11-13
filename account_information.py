@@ -26,8 +26,8 @@ def check_balance(data, username):
     balance = user["balance"]
     sign = "-" if balance < 0 else ""
     balance = abs(balance)
-    whole_azn = balance // 100
-    qepik = balance % 100
+    whole_azn =int( balance // 100)
+    qepik = int(balance % 100)
  
     print("\n========== BALANCE ==========")
     print(f"Available Balance: {sign}{whole_azn}.{qepik:02d} AZN")
