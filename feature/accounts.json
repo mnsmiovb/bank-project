@@ -1,5 +1,5 @@
 {
-    "atm_cash": 460800.0,
+    "atm_cash": 500000,
     "last_txn_number": 0,
     "users": {
         "user01": {
@@ -8,22 +8,14 @@
             "lock_until": 0,
             "blocked": false,
             "account_number": "10010001",
-            "balance": 210800.0,
+            "balance": 250000,
             "daily": {
                 "date": "2026-11-13",
                 "deposited": 0,
-                "withdrawn": 39200.0,
+                "withdrawn": 0,
                 "transfer_count": 0
             },
-            "history": [
-                {
-                    "id": "4e7d37fb-1327-421d-9a76-35d95189379a",
-                    "username": "user01",
-                    "type": "deposit",
-                    "amount": 39200.0,
-                    "date": "2026-11-13"
-                }
-            ],
+            "history": [],
             "last_login": null,
             "last_transaction": null
         },
