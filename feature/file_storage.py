@@ -4,17 +4,13 @@ import os
 import hashlib
 from datetime import date
 from decimal import Decimal, InvalidOperation
-
-
-
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
-base_dir = os.path.dirname(os.path.abspath(__file__))
+base_dir = os.path.dirname(os.path.abspath(__file__))#"absolutepath" deyirki faylin tam yolunu qaytarsin, "dirname" ise faylin yolunun direktoriyasini qaytarir. "abspath" ise faylin tam yolunu qaytarir.
 data_file = os.path.join(base_dir, "accounts.json")
 tmp_file = os.path.join(base_dir, "accounts.tmp")
 corrupt_file = os.path.join(base_dir, "accounts_corrupt.json")
 initial_atm_cash = 500000
-
 def to_cents(text):
     try:
         amount = Decimal(text.strip())
@@ -77,7 +73,7 @@ def is_valid_user(user):
     history=user.get("history")
     if not isinstance(daily, dict) or not isinstance(history, list):
         return False
-    if not isinstance(user.get("password"), str):
+    if not isinstance(user.get("password"), str):# get ile yazmagimizin sebebi odurki adi haldan ferqli olaraq eger get keys tapmasa key error vermir
         return False
     if not isinstance(user.get("account_number"), str):
         return False
@@ -94,35 +90,35 @@ def is_valid_user(user):
     if lock_until < 0:
         return False
     try:
-        date.fromisoformat(daily.get("date"))
+        date.fromisoformat(daily.get("date"))#date.fromisoformat tarixi kompyuterin oxuya bikleceyi data objecte cevirir
     except (TypeError, ValueError):
         return False
-    return all(isinstance(record, dict) and "id" in record for record in history)
+    return all(isinstance(record, dict) and "id" in record for record in history)#tarixcedeki her recorde dict olmali ve id key olmalidir
 def is_valid_data(data):
     if not isinstance(data, dict) or not is_int(data.get("atm_cash")):
         return False
     if "last_txn_number" in data and not is_int(data["last_txn_number"]):
         return False
     users=data.get("users")
-    if not isinstance(users, dict) or not users:
+    if not isinstance(users, dict) or not users:# or nnot users check edirki users dict bos deyil
         return False
-    if not all(is_valid_user(user) for user in users.values()):
+    if not all(is_valid_user(user) for user in users.values()):#her istifadecin melumatlari dogru formatdadir yoxlayir
         return False
-    accounts={user["account_number"] for user in users.values()}
+    accounts={user["account_number"] for user in users.values()}#set yaradiriq ki, her istifadeciye aid account numberler bir defe olsun
     return len(accounts) == len(users)
 def add_missing_fields(data): 
     if "last_txn_number" not in data:
         data["last_txn_number"] = sum(
-            len(user["history"]) for user in data["users"].values())
+            len(user["history"]) for user in data["users"].values())#her istifadeciye aid tarixce uzunlugunu toplayir ve last_txn_number kimi qeyd edir
     for user in data["users"].values():
-        user.setdefault("last_login", None)
+        user.setdefault("last_login", None)#setdefaUlt methodu yoxlayirki key varsa hecne etmir, yoxdursa keyi ve value set edir
         user.setdefault("last_transaction", None)
 def save_data(data):
     try:
-        with open(tmp_file, "w", encoding="utf-8") as file:
-            json.dump(data, file, indent=4)
-            file.flush()
-            os.fsync(file.fileno())
+        with open(tmp_file, "w", encoding="utf-8") as file:#bu hissede melumatlar tmp fayla yazilir, sonra tmp fayl data faylinin yerine kecirilir. Bu usul fayl yazilmasi zamani xeta olarsa data faylinin pozulmamasini temin edir
+            json.dump(data, file, indent=4)#prqramdaki melumatlari json formatinda fayla yazir iden=4 ise bunu duzzlendirerek oxunaqli edir
+            file.flush()#bu komanda ile fayl bir basa yaddasa yazilir bu sayede qefil nasazliq uaransada emeliyyat yaddasda qalir
+            os.fsync(file.fileno())#file.fileno() faylin file descriptorunu qaytarir, os.fsync ise fayl descriptoru ile fayli yaddasa yazir
         os.replace(tmp_file, data_file)
         return True
     except (OSError, TypeError, ValueError):
@@ -138,9 +134,9 @@ def load_data():
         save_data(data)
         return data
     try:
-        with open(data_file, "r", encoding="utf-8") as file:
+        with open(data_file, "r", encoding="utf-8") as file:#r oxumaq ucundur, encoding ise faylin kodlamasini gosterir
             data=json.load(file)
-        if not is_valid_data(data):
+        if not is_valid_data(data):#bayaq yazdiqimiz defle datanin yenide rechek edir
             raise ValueError("Wrong structure")
     except (json.JSONDecodeError, ValueError, OSError):
         print("Fayl pozulub, yeni data yaradilir.")
@@ -151,17 +147,17 @@ def load_data():
         data=create_default_data()
         save_data(data)
         return data
-    add_missing_fields(data)
+    add_missing_fields(data)#eger fayl duz ise dusse onun icinde olmayan valyu ve keyle4ri eklave edecek
     return data
 def take_snapshot(data):
     return copy.deepcopy(data)
-def restore(target, source):
+def restore(target, source):#burda targeti cari data, source ise snapshot kimi qeyd elemisem restore funksiyasi bunlari evex edirki eger cari vezyetde problem yaranarsa snapshotdaki melumatlar geri qaytarilsin
     if isinstance(target, dict):
         for key in list(target):
             if key not in source:
-                del target[key]
+                del target[key]#bu sayede eger acar targetde var amma source de yoxdursa targetden silinir ve xeta bas vermir
         for key, value in source.items():
-            if isinstance(value, (dict, list)) and type(target.get(key)) is type(value):
+            if isinstance(value, (dict, list)) and type(target.get(key)) is type(value):#burda ikinci hisede is ile muqayise edirki targetdeki keyin value typei source deki value typei ile eyni olarsa restore funksiyasi  isleyir
                 restore(target[key], value)
             else:
                 target[key] = copy.deepcopy(value)
@@ -170,8 +166,9 @@ def restore(target, source):
 def commit(data, snapshot):
     if save_data(data):
         return True
-    restore(data, snapshot)
-    return False
+    else:
+        restore(data, snapshot)#belelikle kocurme zamani problem yaransa restora qayidir ve kocurme zamani olan deyisiklikler legv olunur 
+        return False
 if __name__=="__main__":
     data=load_data()
     print(fmt(data["atm_cash"]), list(data["users"].keys()))
