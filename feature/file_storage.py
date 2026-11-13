@@ -1,8 +1,11 @@
 import copy
 import json
 import os
+import hashlib
 from datetime import date
 from decimal import Decimal, InvalidOperation
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 base_dir = os.path.dirname(os.path.abspath(__file__))#"absolutepath" deyirki faylin tam yolunu qaytarsin, "dirname" ise faylin yolunun direktoriyasini qaytarir. "abspath" ise faylin tam yolunu qaytarir.
 data_file = os.path.join(base_dir, "accounts.json")
 tmp_file = os.path.join(base_dir, "accounts.tmp")
@@ -19,8 +22,9 @@ def to_cents(text):
         return None
     return int(amount * 100)
 def fmt(cents):
-    sign="-" if cents < 0 else ""
-    cents=abs(cents)
+    cents = int(cents)
+    sign = "-" if cents < 0 else ""
+    cents = abs(cents)
     return f"{sign}{cents // 100}.{cents % 100:02d}"
 def today_str():
     return str(date.today())
@@ -43,7 +47,7 @@ def create_default_data():
     users = {}
     for username, password, account_number, balance in demo_accounts:
         users[username]={
-            "password": password,
+            "password": hash_password(password),
             "failed_attempts": 0,
             "lock_until": 0,
             "blocked": False,
