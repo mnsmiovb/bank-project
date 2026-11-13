@@ -13,6 +13,7 @@ def withdrawal(data, username):
         user["daily"]["date"] = today
         user["daily"]["deposited"] = 0
         user["daily"]["withdrawn"] = 0
+        user["daily"]["transfer_count"] = 0
 
     # --- SAFE INPUT VALIDATION ---
     try:
@@ -59,7 +60,7 @@ def withdrawal(data, username):
             user["history"].append({
                 "id": str(uuid.uuid4()),
                 "username": username,
-                "type": "deposit",
+                "type": "withdraw",
                 "amount": amount*100,
                 "date": today
             })
