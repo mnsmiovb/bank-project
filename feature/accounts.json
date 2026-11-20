@@ -10,7 +10,7 @@
             "account_number": "10010001",
             "balance": 250000,
             "daily": {
-                "date": "2026-11-13",
+                "date": "2026-11-15",
                 "deposited": 0,
                 "withdrawn": 0,
                 "transfer_count": 0
