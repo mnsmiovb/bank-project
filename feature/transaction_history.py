@@ -12,7 +12,6 @@ other_account_labels={
     transfer_received: "Sender account",
 }
 
-
 def add_transaction(data, username, tx_type, amount, before, after,
                     fee=0, other_account=None):
     data["last_txn_number"] = data.get("last_txn_number", 0) + 1
