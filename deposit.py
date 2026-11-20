@@ -14,6 +14,7 @@ def deposit(data, username):
         user["daily"]["date"] = today
         user["daily"]["deposited"] = 0
         user["daily"]["withdrawn"] = 0
+        user["daily"]["transfer_count"] = 0
         
 
     # --- INPUT VALIDATION ---

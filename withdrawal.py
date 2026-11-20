@@ -13,6 +13,7 @@ def withdrawal(data, username):
         user["daily"]["date"] = today
         user["daily"]["deposited"] = 0
         user["daily"]["withdrawn"] = 0
+        user["daily"]["transfer_count"] = 0
 
     # --- SAFE INPUT VALIDATION ---
     try:
@@ -25,7 +26,7 @@ def withdrawal(data, username):
     amount_qepik = amount * 100
 
     # --- PRE-WITHDRAWAL VALIDATION CHECKS ---
-    if amount <= 0:
+    if amount <= 0 or amount_qepik%1!=0:
         print("Invalid amount!")
 
     # Check daily withdrawal limit (max 1000 AZN = 100,000 qepiks)
@@ -59,7 +60,7 @@ def withdrawal(data, username):
             user["history"].append({
                 "id": str(uuid.uuid4()),
                 "username": username,
-                "type": "deposit",
+                "type": "withdraw",
                 "amount": amount*100,
                 "date": today
             })
